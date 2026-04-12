@@ -119,11 +119,3 @@ README.md                        # This file
 ```
 
 ---
-
-## References
-
-1. Mininet — http://mininet.org/
-2. Ryu SDN Framework — https://ryu.readthedocs.io/
-3. OpenFlow 1.3 Specification — https://opennetworking.org/
-4. Open vSwitch — https://www.openvswitch.org/
-5. Feamster, N., Rexford, J., & Zegura, E. (2014). The Road to SDN. ACM Queue.
