@@ -190,26 +190,6 @@ class DynamicHostBlockingController(app_manager.RyuApp):
         out_port = self.mac_to_port[dpid].get(dst_mac, ofproto.OFPP_FLOOD)
         actions  = [parser.OFPActionOutput(out_port)]
 
-        # Install a match-action forwarding rule for known unicast destinations
-        # Match : in_port + destination MAC
-        # Action: output to learned port
-        # Priority 10 (below DROP at 100, above table-miss at 0)
-        # idle_timeout=5s keeps rules short-lived so the controller
-        # continues to see traffic and rate-tracking stays accurate
-        if out_port != ofproto.OFPP_FLOOD:
-            match = parser.OFPMatch(in_port=in_port, eth_dst=dst_mac)
-            self._add_flow(datapath,
-                           priority=10,
-                           match=match,
-                           actions=actions,
-                           idle_timeout=FLOW_IDLE_TIMEOUT,
-                           hard_timeout=FLOW_HARD_TIMEOUT)
-            logger.info(
-                f"[FLOW INSTALLED] dpid={dpid:#x}  "
-                f"{src_mac} -> {dst_mac}  out_port={out_port}  "
-                f"idle_timeout={FLOW_IDLE_TIMEOUT}s  priority=10"
-            )
-
         # Send current packet out immediately (before rule takes effect)
         self._send_packet(datapath, msg, in_port, actions)
 
